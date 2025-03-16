@@ -2,6 +2,8 @@ package br.com.avanade.model;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
@@ -9,7 +11,10 @@ import java.time.LocalDate;
 @DiscriminatorValue("FIXED")
 public class FixedExpense extends Expense {
 
+    @NotBlank
     private String type;  // Water, Electricity, Internet
+    @NotNull
+    @NotBlank
     private LocalDate dueDate;
 
     public FixedExpense() {}

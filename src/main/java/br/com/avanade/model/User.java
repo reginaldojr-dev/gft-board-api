@@ -1,6 +1,8 @@
 package br.com.avanade.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,8 +15,10 @@ public class User {
 
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Expense> expenses;
+    private List<Expense> expenses = new ArrayList<>(); // Inicializa a lista para evitar NullPointerException
+
 
     public User() {}
 
@@ -40,6 +44,11 @@ public class User {
 
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
+        if (expenses != null) {
+            for (Expense expense : expenses) {
+                expense.setUser(this); // Garante que as despesas pertencem ao usuário
+            }
+        }
     }
 
     public double getTotalByCategory(String category) {

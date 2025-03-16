@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "expense_type")
+@Table(name = "TB_EXPENSE")
 public class Expense {
 
     @Id
@@ -18,7 +17,7 @@ public class Expense {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false) // Garante integridade no banco
     private User user;
 
     public Expense() {}
@@ -73,16 +72,5 @@ public class Expense {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    @Override
-    public String toString() {
-        return "Expense{" +
-                "id=" + id +
-                ", category='" + category + '\'' +
-                ", amount=" + amount +
-                ", date=" + date +
-                ", description='" + description + '\'' +
-                '}';
     }
 }

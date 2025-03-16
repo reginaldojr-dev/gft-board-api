@@ -23,6 +23,9 @@ public class UserService {
     }
 
     public User createUser(User user) {
+        if (user.getExpenses() != null) {
+            user.getExpenses().forEach(expense -> expense.setUser(user)); // Assegura relacionamento correto
+        }
         return userRepository.save(user);
     }
 
