@@ -20,4 +20,3 @@ public class ColunaService {
         return colunaRepository.save(coluna);
     }
 }
-

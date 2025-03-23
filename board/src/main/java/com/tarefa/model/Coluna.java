@@ -1,8 +1,7 @@
 package com.tarefa.model;
 
+import com.tarefa.model.Card;
 import jakarta.persistence.*;
-
-import javax.smartcardio.Card;
 import java.util.List;
 
 @Entity

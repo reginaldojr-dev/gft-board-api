@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Service
 public class BoardService {
-
     @Autowired
     private BoardRepository boardRepository;
 
@@ -30,4 +29,5 @@ public class BoardService {
         boardRepository.deleteById(id);
     }
 }
+
 
