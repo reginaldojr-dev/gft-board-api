@@ -117,4 +117,5 @@ avanade/
 - Melhorias na estrutura de relacionamento entre `User` e `FixedExpense`.
 - Adição do Swagger para documentação da API.
 
-
+## 🛠 Próximos Ajustes
+- Adição de Tratamento de erros
