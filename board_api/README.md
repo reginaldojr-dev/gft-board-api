@@ -37,7 +37,7 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
 ```mermaid
 erDiagram
     BOARD ||--o{ COLUNA : possui
-    COLUNA ||--o{ CARD : contém
+    COLUNA ||--o{ CARD : contem
     BOARD {
         bigint id PK
         string nome
