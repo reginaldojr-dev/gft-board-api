@@ -9,16 +9,9 @@ Entrega adaptada para o **Bootcamp GFT**, mantendo tudo **simples** e fiel ao co
 
 ## Como executar
 
-> Use **apenas um** dos comandos, conforme o seu projeto tiver `mvnw` (Maven) ou `gradlew` (Gradle).
-
 ### Maven
 ```bash
 ./mvnw spring-boot:run
-```
-
-### Gradle
-```bash
-./gradlew bootRun
 ```
 
 Acesse:
