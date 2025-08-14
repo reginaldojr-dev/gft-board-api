@@ -3,65 +3,37 @@ package com.tarefa.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "cards")
+@Table(name = "CARD")
 public class Card {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String titulo;
-    private String descricao;
-    private boolean bloqueado;
-    private String motivoBloqueio;
 
-    @ManyToOne
-    @JoinColumn(name = "coluna_id", nullable = false)
-    private Coluna coluna;
+    @Column(nullable = false)
+    private String title;
 
-    public Long getId() {
-        return id;
+    private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.TODO;
+
+    public Card() {}
+
+    public Card(String title, String description, Status status) {
+        this.title = title;
+        this.description = description;
+        this.status = (status != null ? status : Status.TODO);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getId() { return id; }
+    public String getTitle() { return title; }
+    public String getDescription() { return description; }
+    public Status getStatus() { return status; }
 
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public boolean isBloqueado() {
-        return bloqueado;
-    }
-
-    public void setBloqueado(boolean bloqueado) {
-        this.bloqueado = bloqueado;
-    }
-
-    public String getMotivoBloqueio() {
-        return motivoBloqueio;
-    }
-
-    public void setMotivoBloqueio(String motivoBloqueio) {
-        this.motivoBloqueio = motivoBloqueio;
-    }
-
-    public Coluna getColuna() {
-        return coluna;
-    }
-
-    public void setColuna(Coluna coluna) {
-        this.coluna = coluna;
-    }
+    public void setId(Long id) { this.id = id; }
+    public void setTitle(String title) { this.title = title; }
+    public void setDescription(String description) { this.description = description; }
+    public void setStatus(Status status) { this.status = status; }
 }
