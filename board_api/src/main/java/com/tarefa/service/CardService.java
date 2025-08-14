@@ -1,71 +1,59 @@
 package com.tarefa.service;
 
 import com.tarefa.model.Card;
-import com.tarefa.model.Coluna;
+import com.tarefa.model.Status;
 import com.tarefa.repository.CardRepository;
-import com.tarefa.repository.ColunaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CardService {
-    @Autowired
-    private CardRepository cardRepository;
 
-    @Autowired
-    private ColunaRepository colunaRepository;
+    private final CardRepository repo;
 
-    public List<Card> listarCards() {
-        return cardRepository.findAll();
+    public CardService(CardRepository repo) {
+        this.repo = repo;
     }
 
-    public Card salvarCard(Card card) {
-        return cardRepository.save(card);
+    public List<Card> listar(String board) {
+        return repo.findByBoard(board);
     }
 
-    public Optional<Card> moverCard(Long id) {
-        Optional<Card> cardOpt = cardRepository.findById(id);
-        if (cardOpt.isPresent()) {
-            Card card = cardOpt.get();
-            if (card.isBloqueado()) {
-                return Optional.empty();
-            }
-            List<Coluna> colunas = card.getColuna().getBoard().getColunas();
-            colunas.sort((c1, c2) -> Integer.compare(c1.getOrdem(), c2.getOrdem()));
-            int indexAtual = colunas.indexOf(card.getColuna());
-            if (indexAtual < colunas.size() - 1) {
-                card.setColuna(colunas.get(indexAtual + 1));
-                cardRepository.save(card);
-            }
-            return Optional.of(card);
-        }
-        return Optional.empty();
+    public List<Card> listarPorStatus(Status status, String board) {
+        return repo.findByBoardAndStatus(board, status);
     }
 
-    public Optional<Card> bloquearCard(Long id, String motivo) {
-        Optional<Card> cardOpt = cardRepository.findById(id);
-        if (cardOpt.isPresent()) {
-            Card card = cardOpt.get();
-            card.setBloqueado(true);
-            card.setMotivoBloqueio(motivo);
-            cardRepository.save(card);
-            return Optional.of(card);
-        }
-        return Optional.empty();
+    public Card buscar(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    public Optional<Card> desbloquearCard(Long id, String motivo) {
-        Optional<Card> cardOpt = cardRepository.findById(id);
-        if (cardOpt.isPresent()) {
-            Card card = cardOpt.get();
-            card.setBloqueado(false);
-            card.setMotivoBloqueio(motivo);
-            cardRepository.save(card);
-            return Optional.of(card);
-        }
-        return Optional.empty();
+    public Card criar(Card c, String board) {
+        if (c.getBoard() == null || c.getBoard().isBlank()) c.setBoard(board);
+        if (c.getStatus() == null) c.setStatus(Status.TODO);
+        return repo.save(c);
+    }
+
+    public Card atualizar(Long id, Card c) {
+        Card ref = buscar(id);
+        if (c.getTitle() != null) ref.setTitle(c.getTitle());
+        if (c.getDescription() != null) ref.setDescription(c.getDescription());
+        if (c.getStatus() != null) ref.setStatus(c.getStatus());
+        if (c.getBoard() != null && !c.getBoard().isBlank()) ref.setBoard(c.getBoard());
+        return repo.save(ref);
+    }
+
+    public Card mover(Long id, Status novo) {
+        Card ref = buscar(id);
+        ref.setStatus(novo);
+        return repo.save(ref);
+    }
+
+    public void deletar(Long id) {
+        if (!repo.existsById(id)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        repo.deleteById(id);
     }
 }
